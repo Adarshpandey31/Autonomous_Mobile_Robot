@@ -1,0 +1,62 @@
+[1.205s] Invoking command in '/home/vj/waiterb_ws/src/waiter_b': PYTHONPATH=/home/vj/waiterb_ws/src/waiter_b/build/waiter_b/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/waiter_b build --build-base /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build install --record /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/install.log --single-version-externally-managed install_data
+[1.435s] running egg_info
+[1.435s] creating build/waiter_b/waiter_b.egg-info
+[1.451s] writing build/waiter_b/waiter_b.egg-info/PKG-INFO
+[1.451s] writing dependency_links to build/waiter_b/waiter_b.egg-info/dependency_links.txt
+[1.452s] writing entry points to build/waiter_b/waiter_b.egg-info/entry_points.txt
+[1.452s] writing requirements to build/waiter_b/waiter_b.egg-info/requires.txt
+[1.452s] writing top-level names to build/waiter_b/waiter_b.egg-info/top_level.txt
+[1.452s] writing manifest file 'build/waiter_b/waiter_b.egg-info/SOURCES.txt'
+[1.486s] reading manifest file 'build/waiter_b/waiter_b.egg-info/SOURCES.txt'
+[1.487s] writing manifest file 'build/waiter_b/waiter_b.egg-info/SOURCES.txt'
+[1.487s] running build
+[1.487s] running build_py
+[1.487s] creating /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build
+[1.487s] creating /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib
+[1.488s] creating /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b
+[1.488s] copying waiter_b/teleop.py -> /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b
+[1.489s] copying waiter_b/arduino_bridge.py -> /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b
+[1.490s] copying waiter_b/lidar_filter.py -> /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b
+[1.491s] copying waiter_b/__init__.py -> /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b
+[1.492s] copying waiter_b/dead_reckon.py -> /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b
+[1.493s] running install
+[1.499s] running install_lib
+[1.516s] creating /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b
+[1.517s] copying /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b/teleop.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b
+[1.517s] copying /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b/arduino_bridge.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b
+[1.517s] copying /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b/lidar_filter.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b
+[1.518s] copying /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b/__init__.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b
+[1.518s] copying /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build/lib/waiter_b/dead_reckon.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b
+[1.520s] byte-compiling /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b/teleop.py to teleop.cpython-312.pyc
+[1.521s] byte-compiling /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b/arduino_bridge.py to arduino_bridge.cpython-312.pyc
+[1.522s] byte-compiling /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b/lidar_filter.py to lidar_filter.cpython-312.pyc
+[1.523s] byte-compiling /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b/__init__.py to __init__.cpython-312.pyc
+[1.523s] byte-compiling /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b/dead_reckon.py to dead_reckon.cpython-312.pyc
+[1.524s] running install_data
+[1.524s] creating /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/ament_index
+[1.524s] creating /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/ament_index/resource_index
+[1.525s] creating /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/ament_index/resource_index/packages
+[1.525s] copying resource/waiter_b -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/ament_index/resource_index/packages
+[1.525s] copying package.xml -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b
+[1.525s] creating /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/launch
+[1.526s] copying launch/ekf.launch.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/launch
+[1.527s] copying launch/bridge.launch.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/launch
+[1.528s] copying launch/bringup.launch.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/launch
+[1.529s] copying launch/slam.launch.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/launch
+[1.529s] copying launch/remote_teleop.launch.py -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/launch
+[1.530s] creating /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/config
+[1.531s] copying config/ekf.yaml -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/config
+[1.531s] copying config/lidar_filter.yaml -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/config
+[1.532s] copying config/slam.yaml -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/config
+[1.533s] copying config/view.rviz -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/config
+[1.534s] creating /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/urdf
+[1.535s] copying urdf/waiter_bot.urdf.xacro -> /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/share/waiter_b/urdf
+[1.535s] running install_egg_info
+[1.553s] Copying build/waiter_b/waiter_b.egg-info to /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages/waiter_b-0.0.0-py3.12.egg-info
+[1.555s] running install_scripts
+[1.665s] Installing arduino_bridge script to /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/waiter_b
+[1.665s] Installing dead_reckon script to /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/waiter_b
+[1.665s] Installing lidar_filter script to /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/waiter_b
+[1.666s] Installing teleop script to /home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/waiter_b
+[1.667s] writing list of installed files to '/home/vj/waiterb_ws/src/waiter_b/build/waiter_b/install.log'
+[1.702s] Invoked command in '/home/vj/waiterb_ws/src/waiter_b' returned '0': PYTHONPATH=/home/vj/waiterb_ws/src/waiter_b/build/waiter_b/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vj/waiterb_ws/src/waiter_b/install/waiter_b/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/waiter_b build --build-base /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/build install --record /home/vj/waiterb_ws/src/waiter_b/build/waiter_b/install.log --single-version-externally-managed install_data

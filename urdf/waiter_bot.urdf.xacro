@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<robot name="waiter_bot" xmlns:xacro="http://ros.org/wiki/xacro">
+    <!-- Base -->
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <box size="0.50 0.50 1.2"/>
+                <!-- 50cm x 50cm x 30cm -->
+            </geometry>
+            <origin xyz="0 0 0.60"/>
+            <!-- half the height up, base sits on z=0 -->
+            <material name="blue_wire">
+                <color rgba="0.0 0.3 0.8 0.15"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.50 0.50 1.2"/>
+            </geometry>
+            <origin xyz="0 0 0.6"/>
+            <!-- same offset for collision -->
+        </collision>
+    </link>
+    <!-- IMU link -->
+    <link name="imu_link">
+        <visual>
+            <geometry>
+                <sphere radius="0.02"/>
+            </geometry>
+            <origin xyz="0 0 0.02"/>
+            <material name="green_wire">
+                <color rgba="0.0 1.0 0.0 0.4"/>
+            </material>
+        </visual>
+    </link>
+    <joint name="base_to_imu" type="fixed">
+        <parent link="base_link"/>
+        <child link="imu_link"/>
+        <origin xyz="0.00 -0.20 0.20" rpy="0 0 0"/>
+    </joint>
+    <!-- LiDAR link -->
+    <link name="laser_frame">
+        <visual>
+            <geometry>
+                <cylinder radius="0.04" length="0.05"/>
+            </geometry>
+            <origin xyz="0 0 0.05" rpy="1.5708 0 0"/>
+            <material name="red_wire">
+                <color rgba="1.0 0.0 0.0 0.4"/>
+            </material>
+        </visual>
+    </link>
+    <joint name="base_to_laser" type="fixed">
+        <parent link="base_link"/>
+        <child link="laser_frame"/>
+        <origin xyz="0.15 0.00 0.20" rpy="0 0 3.1416"/>
+        <!-- 5cm inside front edge -->
+    </joint>
+    <!-- Base footprint for navigation / SLAM -->
+    <link name="base_footprint">
+        <visual>
+            <geometry>
+                <sphere radius="0.001"/>
+                <!-- invisible tiny marker -->
+            </geometry>
+            <material name="clear">
+                <color rgba="0 0 0 0"/>
+            </material>
+        </visual>
+    </link>
+    <!-- base_footprint lies on the ground at z = 0 -->
+    <joint name="base_footprint_to_base_link" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+</robot>

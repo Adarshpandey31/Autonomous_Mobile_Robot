@@ -1,0 +1,60 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Name: RobotModel
+      Class: rviz_default_plugins/RobotModel
+      Enabled: true
+      Visual Enabled: true
+      Collision Enabled: false
+      Description Source: robot_description
+      Description Topic: /robot_description
+
+    - Name: LaserScan
+      Class: rviz_default_plugins/LaserScan
+      Topic: /scan
+      Enabled: true
+      Size (m): 0.05
+
+    - Name: TF
+      Class: rviz_default_plugins/TF
+      Enabled: true
+      Show Names: true
+      Show Axes: true
+
+    - Name: Grid
+      Class: rviz_default_plugins/Grid
+      Enabled: true
+      Cell Size: 1.0
+      Color: 160; 160; 160
+
+    - Name: Map
+      Class: rviz_default_plugins/Map
+      Topic: /map
+      Enabled: true
+
+  Global Options:
+    Fixed Frame: map
+    Background Color: 48; 48; 48
+
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/Measure
+    - Class: rviz_default_plugins/SetInitialPose
+    - Class: rviz_default_plugins/SetGoal
+
+  Views:
+    Current: 
+      Class: rviz_default_plugins/Orbit
+      Focal Point: 
+        X: 0
+        Y: 0
+        Z: 0.5
+      Yaw: 0.785
+      Pitch: 3.14
