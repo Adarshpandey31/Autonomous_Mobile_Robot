@@ -1,45 +1,224 @@
-# AMR Waiter Robot
+# AMR Waiter Robot (`waiter_b`)
 
-A ROS 2-based autonomous/mobile waiter robot project with Arduino motor control, LiDAR filtering, dead-reckoning odometry, keyboard teleoperation, and robot visualization using URDF + RViz.
+A **ROS 2** autonomous mobile robot (AMR) — a four-wheel **mecanum** "waiter bot"
+that drives in indoor environments, senses obstacles with a 2D LiDAR, and is
+visualized live in RViz. A computer running ROS 2 handles high-level control,
+sensing, and odometry, while an **Arduino**-based controller drives the motors
+and reads an IMU over a serial link.
+
+The package ships everything needed to bring the robot up, teleoperate it, and
+extend it toward full SLAM-based autonomous navigation.
+
+<p align="center">
+  <em>Middleware:</em> ROS 2 &nbsp;•&nbsp;
+  <em>Base:</em> 4-wheel mecanum (Cytron drivers) &nbsp;•&nbsp;
+  <em>Sensing:</em> RPLidar + BNO055 IMU &nbsp;•&nbsp;
+  <em>Mapping:</em> slam_toolbox
+</p>
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [System Architecture](#system-architecture)
+- [Hardware](#hardware)
+- [Nodes & Topics](#nodes--topics)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Build](#build)
+  - [Flash the Arduino](#flash-the-arduino)
+- [How to Run](#how-to-run)
+- [Configuration](#configuration)
+- [Theory](#theory)
+
+---
 
 ## Features
 
-- ROS 2 Python package: `waiter_b`
-- Arduino bridge for sending robot velocity commands and receiving IMU data
-- LiDAR scan filtering node
-- Dead-reckoning odometry node
-- Keyboard teleoperation
-- Robot visualization using URDF/Xacro and RViz
-- Launch files for bringup, bridge, teleop, and SLAM workflow setup
+- **ROS 2 Python package** (`waiter_b`) with a modular, node-per-task design.
+- **Arduino bridge** — streams `/cmd_vel` velocity commands to the microcontroller
+  over serial and publishes IMU data back as `/imu/data`.
+- **LiDAR scan filter** — cleans raw scans (range + angle gating) into a usable
+  `/scan`.
+- **Dead-reckoning odometry** — calibrated odometry from `/cmd_vel` (no wheel
+  encoders), publishing `/odom` and the `odom → base_link` TF.
+- **Keyboard teleoperation** for manual driving and hardware bring-up testing.
+- **URDF/Xacro robot model** with `robot_state_publisher` + RViz visualization.
+- **Launch files** for full bring-up, the serial bridge, SLAM, EKF sensor
+  fusion, and remote (web) teleop.
+- **SLAM-ready** — `slam_toolbox` and `robot_localization` (EKF) configs included.
+
+## System Architecture
+
+```text
+                 ┌──────────────────────────────────────────────┐
+                 │                   ROS 2 (PC)                  │
+   keyboard ──▶  │  teleop ──▶ /cmd_vel ──▶ arduino_bridge ──┐   │
+                 │                                            │   │
+   RPLidar ──▶ /scan_raw ──▶ lidar_filter ──▶ /scan          │   │
+                 │                                            │   │
+                 │  dead_reckon ──▶ /odom + TF (odom→base)    │   │
+                 │  robot_state_publisher ──▶ RViz            │   │
+                 └────────────────────────────────────────────┼──┘
+                                                  serial (USB) │
+                 ┌────────────────────────────────────────────▼──┐
+                 │         Arduino (low-level controller)         │
+                 │  mecanum kinematics ──▶ 4× Cytron motor driver │
+                 │  BNO055 IMU ──▶ /imu/data (back over serial)   │
+                 └────────────────────────────────────────────────┘
+```
+
+The split keeps **high-level decision-making on the PC** and **real-time
+hardware control on the microcontroller**, connected by a single serial link.
+
+## Hardware
+
+| Component | Part |
+| --- | --- |
+| Compute | PC running ROS 2 |
+| Microcontroller | Arduino (e.g. Mega) |
+| Drive base | 4× mecanum wheels |
+| Motor drivers | Cytron (`PWM_DIR` mode) |
+| IMU | Adafruit **BNO055** (I²C `0x28`) |
+| LiDAR | RPLidar (`rplidar_ros`) |
+
+> Robot geometry (wheel radius, `Lx`, `Ly`) and serial baud rate are set in
+> [`arduino_codes/sketch.ino`](arduino_codes/sketch.ino). Default baud is
+> `115200`.
+
+## Nodes & Topics
+
+| Node | Executable | Subscribes | Publishes |
+| --- | --- | --- | --- |
+| Arduino bridge | `arduino_bridge` | `/cmd_vel` | `/imu/data` |
+| LiDAR filter | `lidar_filter` | `/scan_raw` | `/scan` |
+| Dead-reckoning | `dead_reckon` | `/cmd_vel` | `/odom` + `odom→base_link` TF |
+| Teleop | `teleop` | — | `/cmd_vel` |
 
 ## Project Structure
 
-```bash
-amr_waiter_robot-master/
+```text
+waiter_b/
 ├── arduino_codes/
-│   └── sketch.ino
+│   └── sketch.ino                # Firmware: mecanum kinematics, motors, BNO055 IMU
 ├── config/
-│   ├── ekf.yaml
-│   ├── lidar_filter.yaml
-│   ├── slam.yaml
-│   └── view.rviz
+│   ├── ekf.yaml                  # robot_localization EKF parameters
+│   ├── lidar_filter.yaml         # LiDAR range/angle filter parameters
+│   ├── slam.yaml                 # slam_toolbox parameters
+│   └── view.rviz                 # RViz layout
 ├── launch/
-│   ├── bridge.launch.py
-│   ├── bringup.launch.py
-│   ├── ekf.launch.py
-│   ├── remote_teleop.launch.py
-│   └── slam.launch.py
+│   ├── bringup.launch.py         # Full stack: bridge, lidar, filter, RSP, RViz, odom
+│   ├── bridge.launch.py          # Arduino bridge + RPLidar only
+│   ├── slam.launch.py            # Bring-up wired for SLAM
+│   ├── ekf.launch.py             # robot_localization EKF node
+│   └── remote_teleop.launch.py   # rosbridge web teleop + Arduino bridge
 ├── urdf/
-│   └── waiter_bot.urdf.xacro
+│   └── waiter_bot.urdf.xacro     # Robot model
 ├── waiter_b/
-│   ├── __init__.py
-│   ├── arduino_bridge.py
-│   ├── dead_reckon.py
-│   ├── lidar_filter.py
-│   └── teleop.py
+│   ├── arduino_bridge.py         # Serial bridge: /cmd_vel ⇄ Arduino, IMU publish
+│   ├── dead_reckon.py            # Calibrated dead-reckoning odometry
+│   ├── lidar_filter.py           # Raw-scan cleanup node
+│   └── teleop.py                 # Keyboard teleoperation
 ├── package.xml
 ├── setup.py
 └── setup.cfg
+```
+
+## Getting Started
+
+### Prerequisites
+
+- **ROS 2** (Humble or newer) on Ubuntu, with `colcon` and `rosdep`.
+- A built ROS 2 workspace (e.g. `~/ros2_ws`).
+- ROS 2 dependencies (install via `rosdep`, or manually):
+  - `robot_state_publisher`, `xacro`, `rviz2`, `tf2_ros`, `tf_transformations`
+  - `rplidar_ros` (LiDAR driver)
+  - `slam_toolbox` (mapping), `robot_localization` (EKF)
+  - `rosbridge_server` (only for remote/web teleop)
+- Python: `pyserial` (`pip install pyserial`) for the Arduino serial link.
+
+### Build
+
+```bash
+# Place this package inside your workspace's src/ directory
+cd ~/ros2_ws/src
+git clone https://github.com/Adarshpandey31/Autonomous_Mobile_Robot.git waiter_b
+
+# Install dependencies and build
+cd ~/ros2_ws
+rosdep install --from-paths src --ignore-src -r -y
+colcon build --packages-select waiter_b
+source install/setup.bash
+```
+
+### Flash the Arduino
+
+Open [`arduino_codes/sketch.ino`](arduino_codes/sketch.ino) in the Arduino IDE,
+install the required libraries (`Adafruit_BNO055`, `Adafruit_Sensor`,
+`CytronMotorDriver`), tune the robot-geometry constants to match your chassis,
+and upload it to the board.
+
+> Confirm the serial device names (`/dev/ttyUSB0` for the Arduino,
+> `/dev/ttyUSB1` for the LiDAR by default) and grant access with
+> `sudo usermod -aG dialout $USER` if needed.
+
+## How to Run
+
+> `source install/setup.bash` in every new terminal first.
+
+**Full bring-up** (Arduino bridge + LiDAR + filter + robot model + RViz + odometry):
+
+```bash
+ros2 launch waiter_b bringup.launch.py
+# Override serial ports if needed:
+ros2 launch waiter_b bringup.launch.py bridge_port:=/dev/ttyUSB0 lidar_port:=/dev/ttyUSB1
+```
+
+**Drive it** (in a second terminal):
+
+```bash
+ros2 run waiter_b teleop
+```
+
+**Hardware bridge only** (Arduino + LiDAR, no visualization):
+
+```bash
+ros2 launch waiter_b bridge.launch.py
+```
+
+**SLAM mapping** (run alongside `slam_toolbox`):
+
+```bash
+ros2 launch waiter_b slam.launch.py
+ros2 launch slam_toolbox online_async_launch.py params_file:=config/slam.yaml
+```
+
+**EKF sensor fusion** (fuse odometry + IMU):
+
+```bash
+ros2 launch waiter_b ekf.launch.py
+```
+
+**Remote / web teleop** (via `rosbridge`):
+
+```bash
+ros2 launch waiter_b remote_teleop.launch.py
+```
+
+## Configuration
+
+| File | What it controls |
+| --- | --- |
+| [`config/lidar_filter.yaml`](config/lidar_filter.yaml) | LiDAR range thresholds and front-facing angle window |
+| [`config/slam.yaml`](config/slam.yaml) | `slam_toolbox` solver, frames, and map parameters |
+| [`config/ekf.yaml`](config/ekf.yaml) | `robot_localization` EKF (2D mode, 50 Hz, sensor inputs) |
+| [`config/view.rviz`](config/view.rviz) | RViz displays and layout |
+
+Key launch arguments: `bridge_port`, `bridge_baud`, `lidar_port`, `lidar_baud`.
+The dead-reckoning node exposes `linear_scale` / `angular_scale` calibration
+gains (set in `bringup.launch.py`).
 
 ## Theory
 
