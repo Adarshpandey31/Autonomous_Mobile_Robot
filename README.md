@@ -1,4 +1,4 @@
-# AMR Waiter Robot (`waiter_b`)
+# AMR Waiter Robot
 
 A **ROS 2** autonomous mobile robot (AMR) — a four-wheel **mecanum** "waiter bot"
 that drives in indoor environments, senses obstacles with a 2D LiDAR, and is
